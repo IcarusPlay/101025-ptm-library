@@ -3,6 +3,8 @@ from datetime import datetime
 from django.db import models
 from django.utils import timezone
 
+from library.models import Book
+
 
 class Borrow(models.Model):
     member = models.ForeignKey(
@@ -21,7 +23,7 @@ class Borrow(models.Model):
         related_name='borrows',
     )
     issue_date = models.DateField(
-        default=timezone.now,
+        default=timezone.now
     )
     return_plane_date = models.DateField(
         verbose_name='Планируемая дата возврата',
@@ -36,7 +38,8 @@ class Borrow(models.Model):
         verbose_name='Книгу вернули',
         default=False
     )
-
+    def __str__(self):
+        return f"{self.book.name}  {self.member.username}  {self.issue_date} "
     def check_date_is_returned(self):
         if self.is_returned and self.return_actual_date < datetime.now():
             return False
